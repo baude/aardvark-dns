@@ -25,6 +25,8 @@ env:
 
 
 gcp_credentials: ENCRYPTED[f6a0e4101418bec8180783b208721fc990772817364fed0346f5fd126bf0cfca03738dd8c7fb867944637a1eac7cec37]
+aws_credentials: ENCRYPTED[!918c223891b9ec1b9591cc18d5d848c06a874db8e9fc9c1807e4926b354fa880ca15199ac56e0ca54324483084eaea0d!]
+
 
 
 # Default VM to use unless set or modified by task
@@ -157,6 +159,7 @@ success_task:
     - "integration"
     - "meta"
     - "fedora36_build"
+    - "amazon"
   bin_cache: *ro_bin_cache
   clone_script: *noop
   # The paths used for uploaded artifacts are relative here and in Cirrus
@@ -167,3 +170,12 @@ success_task:
   # https://cirrus-ci.org/guide/writing-tasks/#artifacts-instruction
   binary_artifacts:
     path: ./aardvark-dns*
+
+amazon_task:
+    task:
+    ec2_instance:
+      image: ami-01fc429821bf1f4b4
+      type: t2.micro
+      region: us-west-2
+    script: /user/bin/true
+    depends_on: build
